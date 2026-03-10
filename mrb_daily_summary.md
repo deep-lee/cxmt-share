@@ -1,3 +1,5 @@
+https://gemini.google.com/share/4c55646e377b
+
 # MRB Case AI 总结方案探讨记录
 
 ## 1. 初始需求与方案探讨
