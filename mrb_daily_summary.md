@@ -1,4 +1,4 @@
-https://gemini.google.com/share/4c55646e377b
+https://gemini.google.com/share/22f9dc8454aa
 
 # MRB Case AI 总结方案探讨记录
 
