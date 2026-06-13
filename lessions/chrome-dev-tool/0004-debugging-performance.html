@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 04: Debugging & Performance</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
+    p, li { color: #333; }
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; }
+    .callout {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #f57c00;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .exercise {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    a { color: #1a73e8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #eee; }
+    th { border-bottom: 1px solid #ddd; }
+    @media print {
+      body { background: white; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 4: Debugging & Performance</h1>
+<p><em>Diagnose problems and measure what matters.</em></p>
+
+<h2>What You'll Learn</h2>
+<p>By the end of this lesson, you'll be able to capture console errors from any page, record and analyze Chrome performance traces, run Lighthouse audits, and emulate different devices and network conditions.</p>
+
+<h2>New Tools</h2>
+
+<table>
+  <tr>
+    <th>Tool</th>
+    <th>What it does</th>
+  </tr>
+  <tr>
+    <td><code>performance_start_trace</code></td>
+    <td>Start recording a performance trace (with optional page reload)</td>
+  </tr>
+  <tr>
+    <td><code>performance_stop_trace</code></td>
+    <td>Stop the trace and get an automated performance analysis</td>
+  </tr>
+  <tr>
+    <td><code>performance_analyze_insight</code></td>
+    <td>Get detailed info on a specific performance insight</td>
+  </tr>
+  <tr>
+    <td><code>lighthouse_audit</code></td>
+    <td>Run a Lighthouse audit (accessibility, SEO, best practices)</td>
+  </tr>
+  <tr>
+    <td><code>emulate</code></td>
+    <td>Override network, geolocation, user agent, color scheme</td>
+  </tr>
+  <tr>
+    <td><code>resize_page</code></td>
+    <td>Resize the viewport to specific dimensions</td>
+  </tr>
+  <tr>
+    <td><code>take_heapsnapshot</code></td>
+    <td>Capture JS heap snapshot for memory analysis</td>
+  </tr>
+</table>
+
+<h2>Knowledge: The Debugging Toolkit</h2>
+
+<h3>Console-first debugging</h3>
+<p>When a page isn't working as expected, start here:</p>
+
+<pre><code>1. list_console_messages → see errors and warnings
+2. list_network_requests → check for failed API calls
+3. evaluate_script: document.title → verify page state
+4. take_screenshot → confirm visual state</code></pre>
+
+<p>This is the debugging equivalent of "check the logs" — and it works on any page, even SPAs where the DevTools panel isn't available.</p>
+
+<h3>Performance traces</h3>
+<p>A performance trace records every event in Chrome during a page load (or interaction). The MCP server returns an <strong>automated analysis</strong> with actionable insights like:</p>
+<ul>
+  <li>LCP (Largest Contentful Paint) — when the main content appears</li>
+  <li>Document latency — how long the server took to respond</li>
+  <li>Render blocking — resources delaying first paint</li>
+  <li>Layout shifts — unexpected movement during load</li>
+</ul>
+
+<pre><code>performance_start_trace → (browser reloads) → performance_stop_trace
+  → returns performance analysis with insight sets</code></pre>
+
+<div class="callout">
+<strong>Note:</strong> <code>performance_start_trace</code> can reload the page automatically. Use this to measure cold-load performance. The trace sends URLs to the CrUX API for real-user comparison (disable with <code>--no-performance-crux</code> flag).
+</div>
+
+<h3>Lighthouse audits</h3>
+<p>Lighthouse checks accessibility, SEO, and best practices. Use it when you need a full-page compliance report:</p>
+
+<pre><code>lighthouse_audit (mode: navigation, device: desktop)
+  → returns scores and detailed recommendations</code></pre>
+
+<p>Results include scores (0–100) per category and a list of specific issues to fix.</p>
+
+<h3>Emulation</h3>
+<p>Test how pages behave under different conditions:</p>
+
+<pre><code>emulate (networkConditions: "Slow 3G", colorScheme: "dark")
+→ now every page load uses throttled network</code></pre>
+
+<p>Network presets: <code>Offline</code>, <code>Slow 3G</code>, <code>Fast 3G</code>, <code>Slow 4G</code>, <code>Fast 4G</code>. You can also set custom geolocation, user agent, and viewport.</p>
+
+<div class="warning">
+<strong>Emulation is sticky.</strong> Once set, it applies to all subsequent navigations on that page. Clear it by omitting the parameter (e.g., <code>emulate</code> with no <code>networkConditions</code>).
+</div>
+
+<h2>Knowledge: Memory Debugging</h2>
+<p>If you're debugging memory leaks (e.g., a page grows over time), use the heap snapshot tools:</p>
+
+<pre><code>take_heapsnapshot → captures current JS heap
+get_heapsnapshot_summary → see memory by constructor
+get_heapsnapshot_retaining_paths → find what keeps objects alive</code></pre>
+
+<p>This is an advanced feature. Enable it by starting the server with the <code>--memoryDebugging</code> flag.</p>
+
+<h2>Skill: Practice Tasks</h2>
+
+<div class="exercise">
+<h3>Task A: Debug a failing page</h3>
+<p>Pick any site you know has errors (or use a test page):</p>
+<pre><code>Go to https://example.com, list the console messages,
+then check if there are any network errors</code></pre>
+</div>
+
+<div class="exercise">
+<h3>Task B: Performance trace</h3>
+<pre><code>Record a performance trace of https://developers.chrome.com
+and tell me what's slowing down the page load</code></pre>
+<p>The agent will start a trace, reload the page, and return an analysis of bottlenecks.</p>
+</div>
+
+<div class="exercise">
+<h3>Task C: Lighthouse audit</h3>
+<pre><code>Run a Lighthouse audit on https://example.com
+and tell me the top 3 accessibility issues</code></pre>
+</div>
+
+<div class="exercise">
+<h3>Task D: Emulate mobile</h3>
+<pre><code>Go to https://example.com with a mobile viewport (375x667)
+and take a screenshot. Then run a Lighthouse audit
+on the mobile version.</code></pre>
+</div>
+
+<h2>Primary Source</h2>
+<p>Read the official <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md#performance">performance tools</a> and <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md#lighthouse_audit">Lighthouse audit</a> documentation.</p>
+
+<h2>Next Lesson</h2>
+<p>Lesson 5 will cover <strong>multi-page workflows and session management</strong> — working with multiple tabs, preserving login state, and chaining automations.</p>
+
+<h2>Follow Up</h2>
+<p>If anything is unclear, ask the agent. Performance traces in particular can produce a lot of data — ask the agent to summarize the key findings.</p>
+
+<p>See also: <a href="../reference/glossary.html">Glossary</a> | <a href="0001-setup-chrome-devtools-mcp.html">Lesson 1</a> | <a href="0002-navigate-snapshot-interact.html">Lesson 2</a> | <a href="0003-data-extraction-forms.html">Lesson 3</a></p>
+
+</body>
+</html>

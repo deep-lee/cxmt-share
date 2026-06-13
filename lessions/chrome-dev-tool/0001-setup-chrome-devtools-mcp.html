@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 01: Setup Chrome DevTools MCP in OpenCode</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
+    p, li { color: #333; }
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; }
+    .callout {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .callout code { background: #bbdefb; }
+    .step { margin-bottom: 1.5rem; }
+    .step-num {
+      display: inline-block;
+      background: #1a73e8;
+      color: white;
+      font-weight: 700;
+      width: 1.6rem;
+      height: 1.6rem;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.6rem;
+    }
+    a { color: #1a73e8; }
+    @media print {
+      body { background: white; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 1: Setup Chrome DevTools MCP in OpenCode</h1>
+<p><em>Get your AI agent driving a real browser in 5 minutes.</em></p>
+
+<h2>What You'll Learn</h2>
+<p>By the end of this lesson, you'll have <code>chrome-devtools-mcp</code> running inside opencode and be able to ask your AI agent to navigate a web page, click elements, and take screenshots.</p>
+
+<h2>How It Works</h2>
+<p><code>chrome-devtools-mcp</code> is an official <strong>MCP server</strong> maintained by the Chrome DevTools team. It acts as a bridge:</p>
+
+<pre><code>You (in opencode) → MCP Server → Chrome DevTools Protocol → Chrome Browser</code></pre>
+
+<p>When you ask opencode to "go to example.com and take a screenshot", opencode calls the MCP server, which sends CDP commands to Chrome, which executes them and returns results.</p>
+
+<div class="callout">
+<strong>Key concept:</strong> The <a href="../reference/glossary.html">MCP server</a> automatically launches Chrome for you. No manual browser setup needed (unless you want to connect to an existing browser).
+</div>
+
+<h2>Step 1: Configure opencode</h2>
+
+<p>Add this to your <code>~/.config/opencode/opencode.json</code> file (create it if it doesn't exist):</p>
+
+<pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
+    }
+  }
+}</code></pre>
+
+<p>This tells opencode to start the <code>chrome-devtools-mcp</code> server as a subprocess. The <code>-y</code> flag auto-confirms the npx install.</p>
+
+<h2>Step 2: Restart opencode</h2>
+
+<p>Close and restart opencode. You should see the MCP server start up. You can verify it's connected by checking for the MCP tools in your agent's tool list.</p>
+
+<h2>Step 3: Test It</h2>
+
+<p>Ask your opencode agent a prompt like:</p>
+
+<pre><code>Go to https://example.com and take a screenshot</code></pre>
+
+<p>If everything is set up correctly, opencode will:</p>
+<ol>
+  <li>Launch Chrome (you'll see a browser window appear)</li>
+  <li>Navigate to example.com</li>
+  <li>Take a screenshot and show it to you</li>
+</ol>
+
+<div class="callout">
+<strong>Tip:</strong> If you want to keep browser state (cookies, sessions) between sessions, remove the <code>--isolated</code> flag. By default, the server uses a persistent profile at <code>~/.cache/chrome-devtools-mcp/chrome-profile-stable</code>.
+</div>
+
+<h2>What Each Tool Does</h2>
+
+<p>The server exposes <strong>40+ tools</strong>. The ones you'll use most:</p>
+
+<table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+  <tr style="border-bottom: 1px solid #ddd;">
+    <th style="text-align: left; padding: 0.4rem 0.5rem;">Tool</th>
+    <th style="text-align: left; padding: 0.4rem 0.5rem;">What it does</th>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>navigate_page</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Go to a URL</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>take_snapshot</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Get page DOM with element IDs</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>click</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Click an element by CSS selector or UID</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>fill</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Type text into an input</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>take_screenshot</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Capture a PNG screenshot</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #eee;">
+    <td style="padding: 0.4rem 0.5rem;"><code>evaluate_script</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Run JS in the page</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.4rem 0.5rem;"><code>list_console_messages</code></td>
+    <td style="padding: 0.4rem 0.5rem;">Read console logs</td>
+  </tr>
+</table>
+
+<p>See the <a href="../reference/glossary.html">glossary</a> for the full list.</p>
+
+<h2>Your Task</h2>
+
+<p><strong>Goal:</strong> Get the setup working and run your first automation.</p>
+
+<ol>
+  <li>Add the MCP config to your <code>opencode.json</code></li>
+  <li>Restart opencode</li>
+  <li>Ask your agent to navigate to a site and take a screenshot</li>
+  <li>Try asking it to <strong>click a link</strong> on the page</li>
+</ol>
+
+<p>Once you see the screenshot, you've succeeded. 🎉</p>
+
+<h2>Primary Source</h2>
+<p>Read the official README: <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">github.com/ChromeDevTools/chrome-devtools-mcp</a></p>
+
+<h2>Next Steps</h2>
+<p>In the next lesson, we'll dive deeper into <strong>navigation and page interaction</strong> — clicking elements, filling forms, and waiting for content to load.</p>
+
+<h2>Follow Up</h2>
+<p>If anything is unclear, ask the agent (opencode)! Your teacher can help you troubleshoot, explain concepts further, or adapt the lesson to your needs.</p>
+
+</body>
+</html>

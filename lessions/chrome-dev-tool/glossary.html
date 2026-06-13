@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome DevTools MCP — Glossary</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #1a73e8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.3rem; margin-top: 2rem; color: #1a73e8; }
+    dl { margin: 0; }
+    dt { font-weight: 600; margin-top: 1.2rem; font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace; font-size: 0.95rem; color: #0d47a1; }
+    dd { margin-left: 0; margin-top: 0.2rem; color: #444; }
+    code { background: #e8eaf6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+    @media print {
+      body { background: white; }
+      a { color: #1a73e8; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Chrome DevTools MCP — Glossary</h1>
+
+  <h2>Core Concepts</h2>
+  <dl>
+    <dt>CDP (Chrome DevTools Protocol)</dt>
+    <dd>The wire protocol that allows tools to inspect, debug, and control Chromium-based browsers. All MCP tools in <code>chrome-devtools-mcp</code> communicate via CDP commands under the hood.</dd>
+
+    <dt>MCP (Model Context Protocol)</dt>
+    <dd>An open protocol that lets AI assistants (like opencode) connect to external tools and data sources. <code>chrome-devtools-mcp</code> is an MCP server.</dd>
+
+    <dt>MCP Server</dt>
+    <dd>A process that exposes tools to an MCP client (opencode). Configured in <code>opencode.json</code> under the <code>mcp</code> key.</dd>
+
+    <dt>opencode.json</dt>
+    <dd>The configuration file for opencode. Located at <code>~/.config/opencode/opencode.json</code>. MCP servers and plugins are configured here.</dd>
+
+    <dt>Remote Debugging Port</dt>
+    <dd>A port (default <code>9222</code>) on which Chrome listens for CDP connections. Enabled by launching Chrome with <code>--remote-debugging-port=9222</code>.</dd>
+
+    <dt>WebSocket (WS) Endpoint</dt>
+    <dd>A URL like <code>ws://127.0.0.1:9222/devtools/browser/&lt;id&gt;</code> that the MCP server uses to connect to a running Chrome instance.</dd>
+
+    <dt>Page / Target</dt>
+    <dd>Each browser tab or window is a "target" in CDP. Tools like <code>list_pages</code> enumerate these targets.</dd>
+
+    <dt>Snapshot / AX Tree</dt>
+    <dd>An accessibility-tree snapshot of the page DOM with unique IDs (<code>[uid]</code> markers). Used by <code>take_snapshot</code> to identify clickable/fillable elements.</dd>
+  </dl>
+
+  <h2>Key Tools</h2>
+  <dl>
+    <dt>navigate_page</dt>
+    <dd>Navigates the current page to a URL. Waits for the page to load before returning.</dd>
+
+    <dt>click</dt>
+    <dd>Clicks an element identified by a CSS selector or a snapshot UID.</dd>
+
+    <dt>fill</dt>
+    <dd>Fills an input field identified by CSS selector or snapshot UID.</dd>
+
+    <dt>take_snapshot</dt>
+    <dd>Captures the accessibility tree of the current page, returning elements with <code>[uid]</code> identifiers for use by <code>click</code> and <code>fill</code>.</dd>
+
+    <dt>take_screenshot</dt>
+    <dd>Captures a PNG screenshot of the current page.</dd>
+
+    <dt>evaluate_script</dt>
+    <dd>Executes arbitrary JavaScript in the page context and returns the result.</dd>
+
+    <dt>list_console_messages</dt>
+    <dd>Gets console output (log, warn, error) from the page.</dd>
+
+    <dt>list_network_requests</dt>
+    <dd>Lists network requests made by the page.</dd>
+
+    <dt>fill_form</dt>
+    <dd>Fills multiple form fields at once from a dictionary of {selector: value} pairs.</dd>
+
+    <dt>performance_start_trace / performance_stop_trace</dt>
+    <dd>Records a Chrome DevTools performance trace for analysis.</dd>
+
+    <dt>list_pages</dt>
+    <dd>Lists all open pages/tabs in the browser.</dd>
+
+    <dt>new_page / close_page</dt>
+    <dd>Creates or closes a browser tab.</dd>
+  </dl>
+
+  <h2>Configuration Flags</h2>
+  <dl>
+    <dt>--headless</dt>
+    <dd>Run Chrome without a visible UI window.</dd>
+
+    <dt>--isolated</dt>
+    <dd>Use a temporary Chrome profile that is cleaned up when the browser closes.</dd>
+
+    <dt>--autoConnect</dt>
+    <dd>Automatically connect to a running Chrome instance (Chrome 144+).</dd>
+
+    <dt>--slim</dt>
+    <dd>Expose only 3 core tools (navigate, evaluate, screenshot) for basic tasks.</dd>
+
+    <dt>--channel</dt>
+    <dd>Choose Chrome channel: <code>stable</code>, <code>beta</code>, <code>dev</code>, or <code>canary</code>.</dd>
+
+    <dt>--userDataDir</dt>
+    <dd>Path to Chrome's user data directory (preserves cookies, sessions).</dd>
+
+    <dt>--viewport</dt>
+    <dd>Initial viewport size, e.g. <code>1280x720</code>.</dd>
+  </dl>
+</body>
+</html>

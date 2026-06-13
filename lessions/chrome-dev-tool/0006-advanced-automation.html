@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 06: Advanced Automation Patterns</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
+    p, li { color: #333; }
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; }
+    .callout {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #f57c00;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .exercise {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    a { color: #1a73e8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #eee; }
+    th { border-bottom: 1px solid #ddd; }
+    @media print {
+      body { background: white; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 6: Advanced Automation Patterns</h1>
+<p><em>Dialogs, file uploads, keyboard shortcuts, drag-and-drop, and browser extensions.</em></p>
+
+<h2>What You'll Learn</h2>
+<p>By the end of this lesson, you'll be able to handle browser dialogs (alert/confirm/prompt), upload files, use keyboard shortcuts, perform drag-and-drop, and install Chrome extensions during automation.</p>
+
+<h2>New Tools</h2>
+
+<table>
+  <tr>
+    <th>Tool</th>
+    <th>What it does</th>
+  </tr>
+  <tr>
+    <td><code>handle_dialog</code></td>
+    <td>Accept or dismiss a browser dialog (alert, confirm, prompt)</td>
+  </tr>
+  <tr>
+    <td><code>upload_file</code></td>
+    <td>Upload a file by selecting it in a file picker</td>
+  </tr>
+  <tr>
+    <td><code>type_text</code></td>
+    <td>Type text character by character into a focused element</td>
+  </tr>
+  <tr>
+    <td><code>press_key</code></td>
+    <td>Press a key or combo (Ctrl+A, Tab, Escape, etc.)</td>
+  </tr>
+  <tr>
+    <td><code>drag</code></td>
+    <td>Drag one element onto another</td>
+  </tr>
+  <tr>
+    <td><code>click_at</code></td>
+    <td>Click at x,y coordinates (requires <code>--experimentalVision</code>)</td>
+  </tr>
+  <tr>
+    <td><code>install_extension</code></td>
+    <td>Install a Chrome extension from the store or unpacked</td>
+  </tr>
+  <tr>
+    <td><code>list_extensions</code></td>
+    <td>List installed extensions</td>
+  </tr>
+  <tr>
+    <td><code>uninstall_extension</code></td>
+    <td>Remove an extension by ID</td>
+  </tr>
+</table>
+
+<h2>Knowledge: Handling Dialogs</h2>
+
+<p>Browser dialogs (<code>alert()</code>, <code>confirm()</code>, <code>prompt()</code>) block the page until dismissed. The automation agent can't interact with the page while a dialog is open — it must handle the dialog first:</p>
+
+<pre><code>1. click a button that triggers alert()
+2. handle_dialog (action: "accept")
+     → dialog is dismissed, page interaction resumes</code></pre>
+
+<pre><code>// For prompt dialogs, you can provide text:
+handle_dialog (action: "accept", promptText: "my response")</code></pre>
+
+<div class="callout">
+<strong>Tip:</strong> The agent detects open dialogs automatically. You don't usually need to ask for <code>handle_dialog</code> explicitly — just tell the agent what to do and it will handle the dialog when it appears.
+</div>
+
+<h2>Knowledge: File Uploads</h2>
+
+<p>Uploading a file requires two things: a file input element and a local file path:</p>
+
+<pre><code>1. take_snapshot → find the file input element UID
+2. upload_file (uid: [7], filePath: "/path/to/file.pdf")
+     → file is selected and ready for submission</code></pre>
+
+<div class="warning">
+<strong>Important:</strong> The file path is from your <em>local machine</em>. The agent reads the file from your filesystem and sends it to the browser. Use absolute paths.
+</div>
+
+<h2>Knowledge: Keyboard & Type Actions</h2>
+
+<h3>press_key vs type_text</h3>
+
+<p><code>press_key</code> is for single keys or shortcuts (Enter, Tab, Ctrl+A, Ctrl+Shift+R). <code>type_text</code> is for typing character by character into the currently focused element — useful when <code>fill</code> doesn't trigger the right events:</p>
+
+<pre><code>// Fill vs type comparison:
+fill (uid: [5], value: "hello")       → sets value directly
+type_text (text: "hello")              → types each keystroke
+
+// Keyboard shortcuts:
+press_key (key: "Control+A")           → select all
+press_key (key: "Delete")              → clear
+press_key (key: "Control+V")           → paste</code></pre>
+
+<div class="callout">
+<strong>When to type_text:</strong> Some sites (especially SPAs) listen for keydown/keyup events that <code>fill</code> doesn't trigger. If <code>fill</code> works but the page doesn't react, try <code>type_text</code> instead.
+</div>
+
+<h2>Knowledge: Drag-and-Drop</h2>
+
+<p>Drag an element from one location onto another:</p>
+
+<pre><code>1. take_snapshot → find source element UID and target element UID
+2. drag (from_uid: [3], to_uid: [12])
+     → element [3] is dropped onto element [12]</code></pre>
+
+<p>Common use cases: reorderable lists, kanban boards, file upload zones.</p>
+
+<h3>Coordinate-based clicks</h3>
+<p>If you need to click at a specific pixel position (e.g., on a canvas):</p>
+
+<pre><code>// Requires server config: --experimentalVision
+click_at (x: 450, y: 300)</code></pre>
+
+<p>Enable this by adding <code>"--experimentalVision"</code> to your server args in <code>opencode.json</code>.</p>
+
+<h2>Knowledge: Extensions</h2>
+
+<p>You can install Chrome extensions during automation. Extensions persist as long as the profile persists:</p>
+
+<pre><code>install_extension (id: "cjpalhdlnbpafiamejdnhcphjbkeiagm")
+  → installs uBlock Origin from the Chrome Web Store</code></pre>
+
+<pre><code>// List installed to find extension IDs:
+list_extensions → returns IDs and names</code></pre>
+
+<div class="callout">
+<strong>Note:</strong> The extensions feature requires the MCP server to use a <strong>pipe connection</strong>. It doesn't work with <code>--autoConnect</code>, <code>--browserUrl</code>, or <code>--wsEndpoint</code> until Chrome 149+.
+</div>
+
+<h2>Skill: Practice Tasks</h2>
+
+<div class="exercise">
+<h3>Task A: Dialog handling</h3>
+<pre><code>Go to https://alert-test-site (or any page with a JS alert),
+click the button that triggers an alert, and accept it.
+Then confirm the dialog is gone by taking a screenshot.</code></pre>
+</div>
+
+<div class="exercise">
+<h3>Task B: File upload</h3>
+<pre><code>Go to https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_file,
+upload any small file from your desktop, and take a screenshot
+showing the file was selected.</code></pre>
+<p>The agent will need to navigate into the iframe or use the file input element's UID.</p>
+</div>
+
+<div class="exercise">
+<h3>Task C: Keyboard shortcut</h3>
+<pre><code>Go to https://example.com, take a screenshot,
+then press Ctrl+A (select all) followed by Ctrl+C (copy).
+Use evaluate_script to verify nothing broke.</code></pre>
+</div>
+
+<div class="exercise">
+<h3>Task D: Type text into a rich editor</h3>
+<pre><code>Go to any page with a textarea or rich text editor,
+click it to focus, then type_text "Hello, world!"
+and take a screenshot.</code></pre>
+</div>
+
+<h2>Primary Source</h2>
+<p>Read the official <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md">complete tool reference</a> — all input automation and extension tools are documented there.</p>
+
+<h2>Summary: All 6 Lessons</h2>
+
+<table>
+  <tr>
+    <th>Lesson</th>
+    <th>What you learned</th>
+  </tr>
+  <tr><td>1</td><td>Setup chrome-devtools-mcp in opencode</td></tr>
+  <tr><td>2</td><td>Navigate → Snapshot → Interact cycle</td></tr>
+  <tr><td>3</td><td>Data extraction via evaluate_script, network, console</td></tr>
+  <tr><td>4</td><td>Debugging, performance traces, Lighthouse, emulation</td></tr>
+  <tr><td>5</td><td>Multi-tab workflows and session persistence</td></tr>
+  <tr><td>6</td><td>Dialogs, uploads, keyboard, drag, extensions</td></tr>
+</table>
+
+<h2>Follow Up</h2>
+<p>That's the core curriculum! If you want to dive deeper into any topic, or try a real-world automation project, let me know. You can also ask the agent to help you build a specific automation script.</p>
+
+<p>See also: <a href="../reference/glossary.html">Glossary</a> | <a href="0001-setup-chrome-devtools-mcp.html">Lesson 1</a> | <a href="0002-navigate-snapshot-interact.html">Lesson 2</a> | <a href="0003-data-extraction-forms.html">Lesson 3</a> | <a href="0004-debugging-performance.html">Lesson 4</a> | <a href="0005-multipage-sessions.html">Lesson 5</a></p>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 02: Navigate, Snapshot, Interact</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
+    p, li { color: #333; }
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; }
+    .callout {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .callout code { background: #bbdefb; }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #f57c00;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .exercise {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    a { color: #1a73e8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #eee; }
+    th { border-bottom: 1px solid #ddd; }
+    @media print {
+      body { background: white; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 2: Navigate, Snapshot, Interact</h1>
+<p><em>The core automation cycle: see the page, find elements, act on them.</em></p>
+
+<h2>What You'll Learn</h2>
+<p>By the end of this lesson, you'll understand the fundamental automation loop — <strong>navigate → snapshot → interact → verify</strong> — and be able to click links, fill inputs, and wait for page changes.</p>
+
+<h2>The Automation Cycle</h2>
+<p>Every browser automation task follows the same pattern:</p>
+
+<pre><code>1. navigate_page   → go to a URL
+2. take_snapshot   → get the page's element tree with [uid] markers
+3. click / fill    → act on elements by UID or CSS selector
+4. wait_for        → wait for a result to appear
+5. take_snapshot   → verify (loop back to step 3 if needed)</code></pre>
+
+<p>The <strong>snapshot</strong> is the key enabler. It returns an accessibility tree of the page where every interactive element has a unique ID like <code>[17]</code>. You pass that UID to <code>click</code> or <code>fill</code>.</p>
+
+<div class="callout">
+<strong>Why snapshots?</strong> CSS selectors break when the page changes. UIDs from the accessibility tree are more stable and don't require you to inspect the DOM. The agent handles finding the right UID — you just describe what you want to click.
+</div>
+
+<h2>New Tools for This Lesson</h2>
+
+<table>
+  <tr>
+    <th>Tool</th>
+    <th>What it does</th>
+    <th>When to use</th>
+  </tr>
+  <tr>
+    <td><code>take_snapshot</code></td>
+    <td>Get page AX tree with <code>[uid]</code> markers</td>
+    <td>Before every click/fill</td>
+  </tr>
+  <tr>
+    <td><code>click</code></td>
+    <td>Click element by UID or CSS selector</td>
+    <td>Buttons, links, checkboxes</td>
+  </tr>
+  <tr>
+    <td><code>fill</code></td>
+    <td>Type text into an input field</td>
+    <td>Single text inputs</td>
+  </tr>
+  <tr>
+    <td><code>fill_form</code></td>
+    <td>Fill multiple fields at once</td>
+    <td>Forms with 2+ inputs</td>
+  </tr>
+  <tr>
+    <td><code>wait_for</code></td>
+    <td>Wait for text to appear on page</td>
+    <td>After navigation or clicks</td>
+  </tr>
+  <tr>
+    <td><code>hover</code></td>
+    <td>Hover over an element</td>
+    <td>Dropdown menus, tooltips</td>
+  </tr>
+  <tr>
+    <td><code>press_key</code></td>
+    <td>Press a key or combo (e.g., Enter)</td>
+    <td>Keyboard shortcuts, form submission</td>
+  </tr>
+</table>
+
+<h2>Knowledge: How Snapshot UIDs Work</h2>
+
+<p>When you call <code>take_snapshot</code>, the server returns a text representation of the page's accessibility tree like this:</p>
+
+<pre><code>[1] Heading: "Welcome"
+[2] Link: "Get Started"
+[3] Text input: "Search..."
+[4] Button: "Submit"</code></pre>
+
+<p>The agent (opencode) reads this output and uses the <code>[uid]</code> values (the numbers in brackets) to target <code>click</code> and <code>fill</code> calls. You as the user just describe what you want — the agent handles UID lookup.</p>
+
+<div class="warning">
+<strong>Important:</strong> The snapshot is <em>stale</em> after any page change. Always call <code>take_snapshot</code> again after navigating, clicking, or submitting a form to get fresh UIDs.
+</div>
+
+<h2>Skill: Your First Automation Task</h2>
+
+<p>Here's a concrete task to practice the full cycle. Open opencode and ask your agent to do this:</p>
+
+<pre><code>Go to https://en.wikipedia.org, search for "Browser automation",
+click the first result, and take a screenshot</code></pre>
+
+<p>The agent will:</p>
+<ol>
+  <li>Call <code>navigate_page</code> to go to Wikipedia</li>
+  <li>Call <code>take_snapshot</code> to find the search input</li>
+  <li>Call <code>fill</code> to type "Browser automation" into the search box</li>
+  <li>Call <code>press_key</code> with Enter or <code>click</code> the search button</li>
+  <li>Call <code>take_snapshot</code> again (fresh UIDs after navigation)</li>
+  <li>Call <code>click</code> on the first search result</li>
+  <li>Call <code>take_snapshot</code> to confirm</li>
+  <li>Call <code>take_screenshot</code> to show you the result</li>
+</ol>
+
+<div class="exercise">
+<h3>Practice Task</h3>
+<p>Now try a multi-step automation. Ask your agent to:</p>
+<ol>
+  <li>Go to <strong>google.com</strong></li>
+  <li>Search for <strong>"chrome devtools protocol"</strong></li>
+  <li>Click the <strong>first non-ad result</strong></li>
+  <li>Take a <strong>screenshot</strong></li>
+</ol>
+<p><strong>Hint:</strong> Google's search box needs a <code>fill</code> followed by <code>press_key</code> with Enter.</p>
+</div>
+
+<h2>Common Patterns</h2>
+
+<h3>Fill + Enter (search boxes)</h3>
+<pre><code>fill the search input with "query text"
+then press Enter</code></pre>
+
+<h3>Fill + Click Submit (forms)</h3>
+<pre><code>fill the email input with "user@example.com"
+fill the password input with "mypassword"
+click the "Sign in" button</code></pre>
+
+<h3>Wait for content to load</h3>
+<pre><code>click the "Load more" button
+wait for "Results updated" to appear on the page</code></pre>
+
+<h3>Multi-field forms</h3>
+<pre><code>fill_form with:
+  name: "Jane Doe"
+  email: "jane@example.com"
+  message: "Hello, world"</code></pre>
+
+<h2>Primary Source</h2>
+<p>Read the official <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md">chrome-devtools-mcp tool reference</a> for detailed parameter documentation.</p>
+
+<h2>Next Lesson</h2>
+<p>Lesson 3 will cover <strong>form automation and data extraction</strong> — signing into sites, extracting text, and saving results.</p>
+
+<h2>Follow Up</h2>
+<p>If anything is unclear, ask the agent. Tell it what you tried and what happened — it can help you debug any issues with the automation cycle.</p>
+
+<p>See also: <a href="../reference/glossary.html">Glossary</a> | <a href="0001-setup-chrome-devtools-mcp.html">Lesson 1: Setup</a></p>
+
+</body>
+</html>

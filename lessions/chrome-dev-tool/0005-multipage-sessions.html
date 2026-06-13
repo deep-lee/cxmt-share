@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 05: Multi-Page Workflows & Sessions</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
+    p, li { color: #333; }
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; }
+    .callout {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #f57c00;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .exercise {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    a { color: #1a73e8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #eee; }
+    th { border-bottom: 1px solid #ddd; }
+    @media print {
+      body { background: white; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 5: Multi-Page Workflows & Sessions</h1>
+<p><em>Orchestrate across tabs and keep your login state.</em></p>
+
+<h2>What You'll Learn</h2>
+<p>By the end of this lesson, you'll be able to open and switch between multiple browser tabs, preserve login sessions across automation runs, and chain tasks that span different pages.</p>
+
+<h2>New Tools</h2>
+
+<table>
+  <tr>
+    <th>Tool</th>
+    <th>What it does</th>
+  </tr>
+  <tr>
+    <td><code>list_pages</code></td>
+    <td>List all open tabs/windows with their titles and URLs</td>
+  </tr>
+  <tr>
+    <td><code>select_page</code></td>
+    <td>Switch the active tab to a specific pageId</td>
+  </tr>
+  <tr>
+    <td><code>new_page</code></td>
+    <td>Open a new tab (optionally navigated to a URL)</td>
+  </tr>
+  <tr>
+    <td><code>close_page</code></td>
+    <td>Close a tab by pageId</td>
+  </tr>
+</table>
+
+<h2>Knowledge: Tab Management</h2>
+
+<p>By default, every tool operates on the currently <strong>selected</strong> page. To work across tabs:</p>
+
+<pre><code>1. list_pages            → see all tabs: "pageId: 1, 2, 3"
+2. select_page (pageId:2)→ switch to tab 2
+3. navigate_page / click / fill → act in tab 2
+4. select_page (pageId:1)→ switch back to tab 1</code></pre>
+
+<div class="callout">
+<strong>Key rule:</strong> <code>navigate_page</code>, <code>click</code>, <code>fill</code>, <code>take_snapshot</code>, and <code>take_screenshot</code> all work on the <em>currently selected</em> page. Use <code>select_page</code> to change which page is active.
+</div>
+
+<p>The <code>new_page</code> tool opens a fresh tab and automatically selects it. <code>close_page</code> closes a tab by ID.</p>
+
+<h2>Knowledge: Session Persistence</h2>
+
+<p>By default, <code>chrome-devtools-mcp</code> uses a persistent Chrome profile at:</p>
+
+<pre><code>~/.cache/chrome-devtools-mcp/chrome-profile-stable</code></pre>
+
+<p>This means <strong>cookies, localStorage, and sessions survive between runs</strong>. You can log into a site once, and the session is still there next time you start opencode.</p>
+
+<div class="warning">
+<strong>If you used --isolated:</strong> The <code>--isolated</code> flag creates a temporary profile that's deleted on close. Remove it from your config if you want persistent sessions.
+</div>
+
+<h3>Custom profile path</h3>
+<p>You can specify your normal Chrome profile to share cookies between manual browsing and agent automation:</p>
+
+<pre><code>// In opencode.json:
+"args": ["-y", "chrome-devtools-mcp@latest",
+         "--userDataDir=/Users/you/Library/Application Support/Google/Chrome"]</code></pre>
+
+<div class="callout">
+<strong>Caution:</strong> Using your real Chrome profile means the agent has access to all your logged-in sessions. Only do this on sites you trust the agent to access.
+</div>
+
+<h2>Knowledge: Chaining Automations</h2>
+
+<p>Real workflows often span multiple pages. The pattern is:</p>
+
+<pre><code>1. new_page → "https://site-a.com"
+2. authenticate → fill username + password, click sign in
+3. new_page → "https://site-b.com" (same auth, cookies shared)
+4. extract data from site-b
+5. select_page → back to site-a
+6. confirm the result</code></pre>
+
+<p>Or for comparison tasks:</p>
+
+<pre><code>1. navigate_page → "https://product-a.com"
+2. take_snapshot, extract price
+3. new_page → "https://product-b.com"
+4. take_snapshot, extract price
+5. (agent compares and tells you the result)</code></pre>
+
+<h2>Skill: Practice Tasks</h2>
+
+<div class="exercise">
+<h3>Task A: Cross-tab data comparison</h3>
+<pre><code>Open two tabs: one with https://example.com
+and one with https://httpbin.org/anything.
+List all pages, switch between them,
+and take a screenshot of each.</code></pre>
+<p>The agent will use <code>new_page</code>, <code>list_pages</code>, <code>select_page</code>, and <code>take_screenshot</code>.</p>
+</div>
+
+<div class="exercise">
+<h3>Task B: Session persistence test</h3>
+<pre><code>Go to https://httpbin.org/cookies/set?session=test123,
+verify the cookie was set, then close opencode.
+Restart and ask: check if the session cookie is still there
+on https://httpbin.org/cookies</code></pre>
+<p>This tests whether your session persists between runs (it should unless you used <code>--isolated</code>).</p>
+</div>
+
+<div class="exercise">
+<h3>Task C: Multi-tab scraping</h3>
+<pre><code>Open the Hacker News front page. For each of the top 3 stories,
+open a new tab with that story's URL, take a screenshot,
+then close the tab when done.</code></pre>
+</div>
+
+<h2>Primary Source</h2>
+<p>Read the official <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md#list_pages">page management tool reference</a> and <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp?tab=readme-ov-file#user-data-directory">user data directory docs</a>.</p>
+
+<h2>Next Lesson</h2>
+<p>Lesson 6 will cover <strong>advanced automation patterns</strong> — handling dialogs, file uploads, key presses, drag-and-drop, and working with extensions.</p>
+
+<h2>Follow Up</h2>
+<p>If anything is unclear, ask the agent. Multi-tab workflows can get confusing — the agent can track which tab is active and explain the sequence it's following.</p>
+
+<p>See also: <a href="../reference/glossary.html">Glossary</a> | <a href="0001-setup-chrome-devtools-mcp.html">Lesson 1</a> | <a href="0002-navigate-snapshot-interact.html">Lesson 2</a> | <a href="0003-data-extraction-forms.html">Lesson 3</a> | <a href="0004-debugging-performance.html">Lesson 4</a></p>
+
+</body>
+</html>
