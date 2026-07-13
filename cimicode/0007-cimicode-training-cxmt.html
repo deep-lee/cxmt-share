@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CimiCode Desktop & Skills 培训 — 长鑫存储质量可靠性保证部</title>
+  <style>
+    /* === Reset & Base === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+      color: #1a1a2e;
+      background: #f5f5f7;
+      line-height: 1.6;
+    }
+
+    /* === Slide Container === */
+    .slide {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .slide + .slide { border-top: 1px solid #e0e0e0; }
+
+    /* === Typography === */
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #1a73e8;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #1a73e8;
+    }
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    p { margin-bottom: 0.8rem; color: #444; }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+    .meta {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 2rem;
+    }
+
+    /* === Lists === */
+    ul, ol { margin: 0.6rem 0 1rem 1.4rem; color: #444; }
+    li { margin-bottom: 0.4rem; }
+    li strong { color: #1a1a2e; }
+
+    /* === Code === */
+    code {
+      background: #e8eaf6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    }
+    pre {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      margin: 0.8rem 0;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    /* === Cards === */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid #eee;
+    }
+    .card h3 { margin-top: 0; font-size: 1rem; color: #1a73e8; }
+    .card p { font-size: 0.88rem; margin-bottom: 0; }
+
+    /* === Highlight Box === */
+    .highlight {
+      background: #e3f2fd;
+      border-left: 4px solid #1a73e8;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .highlight.success { background: #e8f5e9; border-left-color: #2e7d32; }
+    .highlight.warning { background: #fff3e0; border-left-color: #f57c00; }
+
+    /* === Table === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    th { background: #f5f5f7; font-weight: 600; color: #333; }
+
+    /* === Demo Step === */
+    .demo-step {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: 0.6rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .demo-step .num {
+      background: #1a73e8;
+      color: white;
+      min-width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* === Speaker Notes (hidden) === */
+    .notes {
+      display: none;
+    }
+
+    /* === Print === */
+    @media print {
+      body { background: white; }
+      .slide { min-height: auto; page-break-after: always; padding: 2rem; }
+      a { text-decoration: none; color: #1a73e8; }
+    }
+
+    /* === Responsive === */
+    @media (max-width: 640px) {
+      html { font-size: 16px; }
+      .slide { padding: 2rem 1.2rem; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.3rem; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Navigation */
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0.4rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      z-index: 100;
+    }
+    .nav-bar a {
+      color: #1a73e8;
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    .nav-bar a:hover { background: #e3f2fd; }
+    .nav-bar .title { color: #666; margin-right: auto; }
+    body { padding-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<!-- ========== Navigation ========== -->
+<nav class="nav-bar">
+  <span class="title">CimiCode Desktop & Skills 培训</span>
+  <a href="#s1">开场</a>
+  <a href="#s2">CimiCode 简介</a>
+  <a href="#s3">Desktop</a>
+  <a href="#s3-ui">界面</a>
+  <a href="#s4">Skills</a>
+  <a href="#s5">示例</a>
+  <a href="#s6">场景</a>
+  <a href="#s6">Demo</a>
+  <a href="#s7">总结</a>
+</nav>
+
+<!-- ========== Slide 1: Title ========== -->
+<div class="slide" id="s1">
+  <h1>CimiCode Desktop & Skills<br>介绍与使用培训</h1>
+  <p class="subtitle">长鑫存储 · 质量可靠性保证部</p>
+  <p style="margin-top:1.5rem; color:#666; font-size:0.95rem;">
+    2026年7月 · 30分钟入门
+  </p>
+  <div class="meta">
+    <p>讲师备注见<a href="0007-speaker-notes.html">讲师备注文档</a> · Demo 脚本见<a href="0007-demo-script.html">Demo 脚本</a></p>
+    <p>术语参考：<a href="../reference/glossary.html">CimiCode 术语表</a></p>
+  </div>
+</div>
+
+<!-- ========== Slide 2: 议程 ========== -->
+<div class="slide">
+  <h2>议程</h2>
+  <ol style="font-size:1.05rem;">
+    <li><strong>开场</strong> — 为什么了解 CimiCode？</li>
+    <li><strong>CimiCode 简介</strong> — 它是什么？能做什么？</li>
+    <li><strong>四种使用方式</strong> — 终端 / Desktop / Web / IDE</li>
+    <li><strong>Skills 介绍</strong> — 什么是技能？如何赋能日常工作？</li>
+    <li><strong>质量可靠性应用场景</strong> — 与我们的工作有什么关系？</li>
+    <li><strong>现场 Demo</strong> — 看完就懂</li>
+    <li><strong>总结 & Q&A</strong></li>
+  </ol>
+</div>
+
+<!-- ========== Slide 3: Why CimiCode ========== -->
+<div class="slide">
+  <h2>为什么了解 CimiCode？</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>🔥 基于 OpenCode 开发</h3>
+      <p>基于 160K+ GitHub Stars 的开源项目 OpenCode 二次开发，社区活跃，持续更新。</p>
+    </div>
+    <div class="card">
+      <h3>🏢 企业级设计</h3>
+      <p>支持 MCP 协议、Skills 自定义、权限控制和配置管理，适合企业环境。</p>
+    </div>
+    <div class="card">
+      <h3>🔒 隐私优先</h3>
+      <p>不存储代码或上下文数据，可在隐私敏感环境中安全使用。</p>
+    </div>
+    <div class="card">
+      <h3>🆓 自动连接智多鑫Token Plan</h3>
+      <p>自动接入企业级 Token 计划，无需额外配置即可使用 AI 模型能力。</p>
+    </div>
+  </div>
+  <div class="highlight">
+    <strong>一句话：</strong>CimiCode 是一个能理解你的需求、操作电脑、帮你完成任务的 AI 助手。
+  </div>
+</div>
+
+<!-- ========== Slide 4: What is CimiCode ========== -->
+<div class="slide">
+  <h2>CimiCode 是什么？</h2>
+  <p>CimiCode 是一个<strong>开源 AI 编码代理</strong>（AI Coding Agent）。</p>
+  <p>你可以把它理解为一个<strong>能操作电脑的 AI 助手</strong>——你告诉它你想做什么，它就能理解你的意图，自动执行操作。</p>
+
+  <div class="highlight" style="margin-top:1.2rem;">
+    <strong>不只是聊天机器人：</strong>普通的 AI 只能"回答"问题。CimiCode 能<strong>操作</strong>——读写文件、运行命令、控制浏览器、调用各种工具。
+  </div>
+
+  <h3>它能做什么？</h3>
+  <ul>
+    <li><strong>写代码/修 Bug</strong> — 理解项目结构，自动生成或修改代码</li>
+    <li><strong>操作文件</strong> — 创建、编辑、搜索文件</li>
+    <li><strong>运行命令</strong> — 帮你执行各种系统命令</li>
+    <li><strong>控制浏览器</strong> — 自动填表、截图、提取数据</li>
+    <li><strong>连接工具</strong> — 通过 MCP 协议连接 浏览器、数据库、测试平台等</li>
+  </ul>
+</div>
+
+<!-- ========== Slide 5: Three Ways ========== -->
+<div class="slide">
+  <h2>四种使用方式</h2>
+  <div class="card-grid">
+    <div class="card" style="border-top: 3px solid #1a73e8;">
+      <h3>🖥 终端 (TUI)</h3>
+      <p>命令行界面，最灵活。运行 <code>cimicode</code> 即可启动。适合开发者日常使用。</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #2e7d32;">
+      <h3>🪟 Desktop 桌面应用</h3>
+      <p><strong>重点推荐</strong>。图形界面，无需命令行。适合所有同事使用。</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #f57c00;">
+      <h3>🌐 Web 浏览器</h3>
+      <p>浏览器中直接使用，同一网络下其他设备也可访问。无需安装客户端。</p>
+    </div>
+    <div class="card" style="border-top: 3px solid #7b1fa2;">
+      <h3>🔌 IDE 扩展</h3>
+      <p>VS Code / Cursor / Zed 等编辑器中直接使用。适合开发同事。</p>
+    </div>
+  </div>
+  <div class="highlight success">
+    <strong>今天我们重点介绍 Desktop 桌面应用</strong> —— 无需任何技术背景，下载安装即可使用。
+  </div>
+</div>
+
+<!-- ========== Slide 6: Desktop App ========== -->
+<div class="slide" id="s3">
+  <h2>CimiCode Desktop (桌面应用)</h2>
+
+  <h3>安装方式</h3>
+  <ol>
+    <li><strong>填写问卷申请</strong> — 提交使用申请，等待审核</li>
+    <li><strong>审核通过后</strong> — 打开<strong>长鑫安全助手</strong> → <strong>软件管理</strong></li>
+    <li><strong>搜索安装</strong> — 搜索 "Cimi"，点击安装即可</li>
+  </ol>
+
+  <h3>主要特性</h3>
+  <ul>
+    <li><strong>图形化界面</strong> — 所见即所得，无需记住命令</li>
+    <li><strong>多会话管理</strong> — 同时开启多个任务</li>
+    <li><strong>自动连接 Token Plan</strong> — 自动接入智多鑫 Token Plan，即开即用</li>
+    <li><strong>文件引用</strong> — 直接在对话中引用文件</li>
+  </ul>
+
+  <div class="highlight warning">
+    <strong>目前为 Beta 版本</strong>，但功能已完善，适合日常使用。正式版将持续更新。
+  </div>
+</div>
+
+<!-- ========== Slide 7: Desktop UI Walkthrough ========== -->
+<div class="slide" id="s3-ui">
+  <h2>CimiCode Desktop 界面导览</h2>
+
+  <p>打开 CimiCode Desktop，你会看到一个简洁的对话界面。以下是主要功能区：</p>
+
+  <div style="background:#fff; border-radius:12px; border:1px solid #ddd; padding:1.2rem; margin:1rem 0;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+      <div style="border-right:1px solid #eee; padding-right:1rem;">
+        <h3 style="margin-top:0;">🗣 对话区</h3>
+        <p style="font-size:0.85rem; color:#555;">你和 AI 对话的主要区域。输入你的需求，AI 会在这里回复并执行任务。</p>
+      </div>
+      <div style="padding-left:0.5rem;">
+        <h3 style="margin-top:0;">⌨️ 输入框</h3>
+        <p style="font-size:0.85rem; color:#555;">在底部输入你想让 AI 做的事，支持中文。按回车发送。</p>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-top:1rem; border-top:1px solid #eee; padding-top:1rem;">
+      <div>
+        <h3 style="margin-top:0;">📎 文件引用</h3>
+        <p style="font-size:0.85rem; color:#555;">拖拽文件或文件夹到窗口，AI 即可读取其中的内容。</p>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">🔄 会话管理</h3>
+        <p style="font-size:0.85rem; color:#555;">左侧可切换多个会话，同时处理不同任务。</p>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">🤖 模型切换</h3>
+        <p style="font-size:0.85rem; color:#555;">可切换不同 AI 模型，已自动接入智多鑫 Token Plan。</p>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem; border-top:1px solid #eee; padding-top:1rem;">
+      <div>
+        <h3 style="margin-top:0;">🔄 Plan / Build 双模式</h3>
+        <p style="font-size:0.85rem; color:#555;">按 Tab 键在 Plan（计划模式，只分析不改动）和 Build（执行模式，可操作文件）之间切换。</p>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">✅ 自动接受权限</h3>
+        <p style="font-size:0.85rem; color:#555;">操作默认自动执行，无需每一步都确认。可在设置中调整为需确认模式。</p>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem; border-top:1px solid #eee; padding-top:1rem;">
+      <div>
+        <h3 style="margin-top:0;">🧩 技能中心</h3>
+        <p style="font-size:0.85rem; color:#555;">浏览和管理可用的 Skills，开箱即用，按需加载。</p>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">⭐ 我的技能</h3>
+        <p style="font-size:0.85rem; color:#555;">查看已使用的技能记录，快速复用常用技能。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight success">
+    界面中可以看到<strong>技能中心</strong>和<strong>我的技能</strong>入口，接下来我们就来介绍 Skills（技能）到底是什么。
+  </div>
+</div>
+
+<!-- ========== Slide 8: Skills Intro ========== -->
+<div class="slide" id="s4">
+  <h2>什么是 Skills？</h2>
+
+  <p>Skills（技能）是 CimiCode 的一种<strong>可复用指令集</strong>。你可以把 Skills 理解为——<strong>提前准备好的"任务模版"</strong>。</p>
+
+  <div class="highlight">
+    <strong>打个比方：</strong>就像你在工作中使用的 SOP（标准作业程序）。不同的是，这个 SOP 是写给 AI 看的，AI 会按照 SOP 的步骤自动执行。
+  </div>
+
+  <h3>Skills 的工作原理</h3>
+  <table>
+    <tr><th>步骤</th><th>说明</th></tr>
+    <tr><td>1. 编写</td><td>在项目中创建 <code>.cimicode/skills/&lt;名称&gt;/SKILL.md</code> 文件</td></tr>
+    <tr><td>2. 定义</td><td>在文件中描述该技能的用途、步骤和注意事项</td></tr>
+    <tr><td>3. 发现</td><td>CimiCode 启动时自动扫描并注册所有可用技能</td></tr>
+    <tr><td rowspan="2">4. 调用</td><td><strong>自动调用：</strong>Agent 根据对话内容自动选择并加载合适的技能</td></tr>
+    <tr><td><strong>手动调用：</strong>通过 <code>/</code> 命令主动触发指定技能</td></tr>
+  </table>
+</div>
+
+<!-- ========== Slide 8: Skills Details ========== -->
+<div class="slide">
+  <h2>Skills 详解</h2>
+
+  <h3>Skill 文件结构</h3>
+  <pre>📁 .cimicode/skills/
+   └── 📁 code-review/         # 技能名称
+        └── 📄 SKILL.md        # 技能定义文件</pre>
+
+  <h3>SKILL.md 示例</h3>
+  <pre>---
+name: code-review
+description: Review code for quality and best practices
+---
+
+## What I do
+- Review code changes for potential issues
+- Suggest improvements
+
+## When to use
+Use this when reviewing pull requests.</pre>
+
+  <h3>存放位置</h3>
+  <ul>
+    <li><strong>项目级：</strong><code>.cimicode/skills/&lt;名称&gt;/SKILL.md</code></li>
+    <li><strong>全局：</strong><code>~/.cimi/cimicode/skills/&lt;名称&gt;/SKILL.md</code></li>
+  </ul>
+
+  <div class="highlight">
+    <strong>关键：</strong>Skill 名称必须和目录名一致，只支持小写字母、数字和单连字符。
+  </div>
+</div>
+
+<!-- ========== Slide 9: Example Skills ========== -->
+<div class="slide">
+  <h2>常用的 Skills 示例</h2>
+
+  <p>CimiCode 内置了丰富的 Skills，开箱即用。以下是一些常用示例：</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>🔥 grill-me</h3>
+      <p>对计划或设计进行"拷问式"评审，帮你发现方案中的漏洞，让思路更严谨。</p>
+    </div>
+    <div class="card">
+      <h3>🎨 frontend-design</h3>
+      <p>前端组件设计助手，帮助设计高内聚低耦合的组件接口。</p>
+    </div>
+    <div class="card">
+      <h3>📊 pptx</h3>
+      <p>自动生成 PPT 文件，根据内容快速创建演示文稿。</p>
+    </div>
+    <div class="card">
+      <h3>📗 xlsx</h3>
+      <p>操作 Excel 文件，读取、分析、生成电子表格数据。</p>
+    </div>
+    <div class="card">
+      <h3>📎 lark</h3>
+      <p>连接飞书（Lark），操作文档、表格、消息等飞书资源。</p>
+    </div>
+    <div class="card">
+      <h3>🏢 workspace</h3>
+      <p>长鑫内部 Workspace 平台 Skill，包含文档、文件夹操作，笔记编辑等</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Slide 10: 质量可靠性场景 ========== -->
+<div class="slide" id="s5">
+  <h2>质量可靠性部门的应用场景</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>📊 数据分析</h3>
+      <p>AI 读取测试数据文件，自动生成统计报告和趋势图。</p>
+    </div>
+    <div class="card">
+      <h3>🔍 缺陷追踪</h3>
+      <p>通过 MCP 连接 Jira/缺陷管理系统，查询、筛选、汇总缺陷信息。</p>
+    </div>
+    <div class="card">
+      <h3>📝 报告生成</h3>
+      <p>根据模板和数据，自动生成质量周报/月报。</p>
+    </div>
+    <div class="card">
+      <h3>✅ 文档审核</h3>
+      <p>AI 辅助审核 SOP、技术文档、变更申请等。</p>
+    </div>
+    <div class="card">
+      <h3>🧪 测试辅助</h3>
+      <p>自动填充测试表单、提取网页测试数据、截图留证。</p>
+    </div>
+    <div class="card">
+      <h3>📋 合规检查</h3>
+      <p>根据检查清单逐项核对，标记不符合项。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Slide 11: Demo ========== -->
+<div class="slide" id="s6">
+  <h2>现场 Demo</h2>
+
+  <p>我们将演示一个<strong>质量可靠性相关</strong>的实战场景：</p>
+
+  <div class="demo-step">
+    <span class="num">1</span>
+    <div><strong>场景：</strong>模拟质检数据分析和报告生成</div>
+  </div>
+  <div class="demo-step">
+    <span class="num">2</span>
+    <div><strong>操作：</strong>AI 读取测试数据文件 → 分析异常 → 生成报告</div>
+  </div>
+  <div class="demo-step">
+    <span class="num">3</span>
+    <div><strong>工具：</strong>CimiCode Desktop + 文件操作 + 数据分析</div>
+  </div>
+
+  <div class="highlight" style="margin-top:1rem;">
+    <strong>无需记住任何命令。</strong>只需用自然语言描述你想要什么，AI 就会帮你完成。
+  </div>
+
+  <p style="margin-top:1rem;">详细步骤见 <a href="0007-demo-script.html">Demo 脚本</a>。</p>
+</div>
+
+<!-- ========== Slide 12: Summary ========== -->
+<div class="slide" id="s7">
+  <h2>总结</h2>
+
+  <div class="card-grid" style="margin-bottom:1.5rem;">
+    <div class="card">
+      <h3>✅ CimiCode</h3>
+      <p>开源 AI 编码代理，能理解需求、自动执行任务。</p>
+    </div>
+    <div class="card">
+      <h3>✅ Desktop</h3>
+      <p>桌面应用，图形界面，无需命令，上手简单。</p>
+    </div>
+    <div class="card">
+      <h3>✅ Skills</h3>
+      <p>可复用的技能模版，让 AI 按 SOP 执行。</p>
+    </div>
+    <div class="card">
+      <h3>✅ 实际价值</h3>
+      <p>数据分析、报告生成、缺陷追踪等场景都可应用。</p>
+    </div>
+  </div>
+
+  <h3>下一步</h3>
+  <ul>
+    <li><strong>安装试用：</strong>下载 Desktop 应用体验</li>
+    <li><strong>提出需求：</strong>告诉我们你想用 AI 做什么，我们可以一起设计对应的 Skill</li>
+    <li><strong>后续培训：</strong>根据需求安排更深入的主题培训</li>
+  </ul>
+
+  <div class="highlight success" style="margin-top:1.2rem;">
+    <strong>Q&A 环节 — 现在请提问！</strong> 任何问题都可以问，我们一起讨论 CimiCode 如何在我们的工作中发挥作用。
+  </div>
+
+  <div class="meta" style="margin-top:2rem;">
+    <p>参考资源：<a href="../reference/glossary.html">CimiCode 术语表</a> · <a href="https://opencode.ai/docs">官方文档</a> · <a href="https://opencode.ai/download">下载 Desktop</a></p>
+    <p>本课件遵循教学工作区格式 · 配套文件：<a href="0007-speaker-notes.html">讲师备注</a> · <a href="0007-demo-script.html">Demo 脚本</a></p>
+  </div>
+</div>
+
+</body>
+</html>

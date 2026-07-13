@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCode 术语表</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+    }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #1a73e8; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.3rem; margin-top: 2rem; color: #1a73e8; }
+    dl { margin: 0; }
+    dt { font-weight: 600; margin-top: 1.2rem; font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace; font-size: 0.95rem; color: #0d47a1; }
+    dd { margin-left: 0; margin-top: 0.2rem; color: #444; }
+    code { background: #e8eaf6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+    @media print {
+      body { background: white; }
+      a { color: #1a73e8; text-decoration: none; }
+    }
+    .zh { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  </style>
+</head>
+<body>
+  <h1>OpenCode 术语表</h1>
+
+  <h2>核心概念</h2>
+  <dl>
+    <dt>OpenCode</dt>
+    <dd class="zh">开源 AI 编码助手（Coding Agent）。支持终端、桌面应用和 IDE 扩展三种使用方式。160K+ GitHub Stars，每月 750 万开发者使用。</dd>
+
+    <dt>OpenCode Desktop</dt>
+    <dd class="zh">OpenCode 的桌面版应用（Beta 阶段）。支持 macOS、Windows、Linux。提供图形化界面，无需操作终端即可使用 AI 编码助手。</dd>
+
+    <dt>Agent（代理）</dt>
+    <dd class="zh">OpenCode 中的 AI 助手。内置有 Build（构建）、Plan（计划）两个主代理，以及 General（通用）、Explore（探索）、Scout（侦察）三个子代理。用户也可自定义代理。</dd>
+
+    <dt>Build Agent（构建代理）</dt>
+    <dd class="zh">OpenCode 的默认主代理，拥有所有工具权限，适合日常开发和代码修改。</dd>
+
+    <dt>Plan Agent（计划代理）</dt>
+    <dd class="zh">只读的主代理，用于分析代码和制定计划，不能修改文件。适合代码审查和方案设计。</dd>
+
+    <dt>Skill（技能）</dt>
+    <dd class="zh">通过 SKILL.md 文件定义的可复用指令集。Agent 可通过内置 skill 工具按需加载。支持项目级和全局级两种存放位置。</dd>
+
+    <dt>MCP (Model Context Protocol)</dt>
+    <dd class="zh">模型上下文协议。一种开放协议，让 AI 助手连接到外部工具和数据源。OpenCode 支持本地和远程 MCP 服务器。</dd>
+
+    <dt>MCP Server (MCP 服务器)</dt>
+    <dd class="zh">向 AI 助手暴露工具的进程。在 opencode.json 中配置，启动后自动可用。</dd>
+
+    <dt>opencode.json</dt>
+    <dd class="zh">OpenCode 的配置文件。支持 JSON/JSONC 格式，可用于配置模型、MCP 服务器、代理、工具权限等。支持全局 (~/.cimi/cimicode/) 和项目级两种配置。</dd>
+
+    <dt>TUI (Terminal User Interface)</dt>
+    <dd class="zh">OpenCode 的终端用户界面。通过运行 opencode 命令启动，提供交互式聊天界面。</dd>
+
+    <dt>Web 界面</dt>
+    <dd class="zh">通过 <code>opencode web</code> 命令启动的浏览器界面。同一网络下的其他设备可访问。</dd>
+  </dl>
+
+  <h2>技能 (Skills) 相关</h2>
+  <dl>
+    <dt>SKILL.md</dt>
+    <dd class="zh">技能定义文件。包含 YAML 前置元数据（frontmatter）和 Markdown 内容。存放在 <code>.cimicode/skills/&lt;name&gt;/</code> 或 <code>~/.cimi/cimicode/skills/&lt;name&gt;/</code> 目录下。</dd>
+
+    <dt>Frontmatter（前置元数据）</dt>
+    <dd class="zh">SKILL.md 文件开头的 YAML 配置块，包含 name（必填）、description（必填）、license（可选）、metadata（可选）等字段。</dd>
+
+    <dt>skill 工具</dt>
+    <dd class="zh">OpenCode 的内置工具，用于列出和加载可用技能。Agent 会自动识别到合适的 skill 并加载使用。</dd>
+
+    <dt>技能权限</dt>
+    <dd class="zh">通过 opencode.json 中的 permission.skill 配置，控制哪些技能可以被加载。支持通配符模式（如 internal-*）。</dd>
+  </dl>
+
+  <h2>代理 (Agents) 相关</h2>
+  <dl>
+    <dt>Primary Agent（主代理）</dt>
+    <dd class="zh">直接与用户交互的代理。可通过 Tab 键在多个主代理间切换。Build 和 Plan 是内置的主代理。</dd>
+
+    <dt>Subagent（子代理）</dt>
+    <dd class="zh">可由主代理调用或通过 @ 提及手动调用的专业化代理。General, Explore, Scout 是内置子代理。</dd>
+
+    <dt>@ 提及</dt>
+    <dd class="zh">在对话中使用 @+代理名 来手动调用子代理。例如 @explore 来探索代码库。</dd>
+
+    <dt>权限 (Permission)</dt>
+    <dd class="zh">控制代理行为的安全设置。支持 allow（允许）、ask（询问）、deny（禁止）三级权限，可精确控制到具体工具甚至 bash 命令。</dd>
+  </dl>
+
+  <h2>配置与使用</h2>
+  <dl>
+    <dt>/init</dt>
+    <dd class="zh">初始化命令。让 OpenCode 分析项目结构并生成 AGENTS.md 文件。</dd>
+
+    <dt>/undo / /redo</dt>
+    <dd class="zh">撤销/重做命令。可撤销 AI 助手上一次的修改。需项目为 Git 仓库。</dd>
+
+    <dt>/share</dt>
+    <dd class="zh">分享当前对话。生成链接后可与团队成员共享。</dd>
+
+    <dt>/compact</dt>
+    <dd class="zh">压缩当前对话上下文。当对话太长时可清理压缩。</dd>
+
+    <dt>@ 文件引用</dt>
+    <dd class="zh">在消息中使用 @+文件名 模糊搜索并引用项目文件。</dd>
+
+    <dt>Tab 键切换</dt>
+    <dd class="zh">在主代理间切换。Build（构建模式）→ Plan（计划模式）→ Build... 循环切换。</dd>
+  </dl>
+
+  <h2>Chrome DevTools MCP 工具</h2>
+  <dl>
+    <dt>CDP (Chrome DevTools Protocol)</dt>
+    <dd class="zh">允许工具检查、调试和控制基于 Chromium 的浏览器的有线协议。</dd>
+
+    <dt>navigate_page</dt>
+    <dd class="zh">导航当前页面到指定 URL。</dd>
+
+    <dt>click</dt>
+    <dd class="zh">点击页面上的元素。</dd>
+
+    <dt>fill / fill_form</dt>
+    <dd class="zh">填充表单输入框。</dd>
+
+    <dt>take_snapshot</dt>
+    <dd class="zh">获取页面无障碍树快照，返回带 uid 标识的元素。</dd>
+
+    <dt>take_screenshot</dt>
+    <dd class="zh">截取页面截图。</dd>
+
+    <dt>evaluate_script</dt>
+    <dd class="zh">在页面上下文中执行 JavaScript。</dd>
+  </dl>
+</body>
+</html>

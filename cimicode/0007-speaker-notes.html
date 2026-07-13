@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>讲师备注 — CimiCode 培训</title>
+  <style>
+    body {
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+      line-height: 1.7;
+    }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; color: #333; }
+    .time { color: #e65100; font-weight: 600; }
+    .note {
+      background: #fff8e1;
+      border-left: 4px solid #ffa000;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .tip {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .warning {
+      background: #fce4ec;
+      border-left: 4px solid #c62828;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    code { background: #e8eaf6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #f5f5f7; }
+  </style>
+</head>
+<body>
+
+<h1>讲师备注 — CimiCode Desktop & Skills 培训</h1>
+<p>总时长：30 分钟 | 受众：质量可靠性保证部（非技术背景）</p>
+
+<!-- ============================================================ -->
+<h2>总体准备</h2>
+
+<h3>会前准备清单</h3>
+<table>
+  <tr><th>事项</th><th>说明</th></tr>
+  <tr><td>安装 CimiCode Desktop</td><td>提前在长鑫安全助手 → 软件管理中安装好最新版 Desktop</td></tr>
+  <tr><td>准备 Demo 数据</td><td>创建一个包含模拟测试数据的 CSV 文件</td></tr>
+  <tr><td>检查网络</td><td>确保演示电脑可以正常联网（模型调用需要网络）</td></tr>
+  <tr><td>准备备用方案</td><td>如网络不通，准备录屏视频作为备用</td></tr>
+  <tr><td>测试投影</td><td>确保投影或屏幕共享正常，字体大小合适</td></tr>
+  <tr><td>打开课件</td><td>提前在浏览器中打开 HTML 课件</td></tr>
+</table>
+
+<h3>演讲风格建议</h3>
+<ul>
+  <li><strong>多用比喻：</strong>把 AI 比作"实习生"或"助手"，不要用技术术语</li>
+  <li><strong>避免深入技术细节：</strong>不要讲 MCP 协议、JSON 配置等技术概念，除非有人问</li>
+  <li><strong>强调"自然语言"：</strong>反复强调"你只需说人话，AI 就能理解"</li>
+  <li><strong>互动：</strong>多问"你们平时做这个工作要多久？"激发共鸣</li>
+  <li><strong>管理期望：</strong>说明 AI 不是万能的，但可以大幅提升效率</li>
+</ul>
+
+<!-- ============================================================ -->
+<hr>
+<h2>逐页演讲脚本</h2>
+
+<!-- --- Slide 1: Title --- -->
+<h3>Slide 1: 封面 <span class="time">(1 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"大家好！今天给大家带来一个非常有意思的工具——CimiCode。我先做个简单的自我介绍，我是 XXX（你的名字），来自 XXX 部门。今天的培训大约 30 分钟，我会先介绍 CimiCode 是什么，然后重点介绍 Desktop 桌面版的使用，最后做一个现场演示。"
+</div>
+<p><strong>要点：</strong>轻松开场，建立亲切感。强调"30 分钟很短，干货满满"。</p>
+
+<!-- --- Slide 2: 议程 --- -->
+<h3>Slide 2: 议程 <span class="time">(0.5 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"今天的安排是这样的——先简单介绍 CimiCode 是什么、能做什么，然后介绍三种使用方式，重点是我们今天的主角 Desktop，再介绍 Skills 这个概念，最后看一些和我们质量工作相关的应用场景和现场演示。"
+</div>
+
+<!-- --- Slide 3: Why --- -->
+<h3>Slide 3: 为什么了解 CimiCode <span class="time">(1.5 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"首先，大家可能会问——我为什么要了解这个东西？我给大家几个数据：CimiCode 是 GitHub 上最热门的开源 AI 项目之一，有超过 16 万颗星标。它不是一个普通的聊天机器人，而是一个能真正干活的 AI 助手。最重要的是，它是免费的，而且注重隐私安全——你的代码和数据不会被上传到别人的服务器。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>这里可以问一下："大家听说过 ChatGPT 或类似的 AI 工具吗？" 建立对比。
+</div>
+
+<!-- --- Slide 4: What is CimiCode --- -->
+<h3>Slide 4: CimiCode 是什么 <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"简单来说，CimiCode 是一个 AI 助手，但它比普通的聊天机器人更强大——它不仅能回答问题，还能实际操作你的电脑。比如你告诉它'帮我把这个 Excel 文件里的数据整理一下，生成一个报告'，它就能自动读取文件、分析数据、写出报告。它的能力包括：写代码、改文件、搜索代码、运行命令、控制浏览器等等。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>用具体例子说明"能做什么"比抽象描述更有说服力。
+</div>
+
+<!-- --- Slide 5: Three Ways --- -->
+<h3>Slide 5: 四种使用方式 <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"CimiCode 有四种使用方式。终端方式最适合开发者。Desktop 桌面应用是今天的主角——它提供图形界面，你不需要记任何命令，像使用普通软件一样。Web 版可以在浏览器中直接使用，无需安装。IDE 扩展是在 VS Code 等编辑器里直接使用。对于质量部门的同事来说，我推荐 Desktop 和 Web 版本。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>这里可以打开 Desktop 应用让观众看一眼界面，增加直观感。
+</div>
+
+<!-- --- Slide 6: Desktop --- -->
+<h3>Slide 6: Desktop 桌面应用 <span class="time">(1 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"Desktop 版本目前是 Beta 阶段，但功能已经很完善了。安装非常简单——先填写问卷申请，审核通过后在长鑫安全助手的软件管理中搜索 Cimi 安装即可。"
+</div>
+
+<!-- --- Slide 7: Desktop 界面导览 --- -->
+<h3>Slide 7: Desktop 界面导览 <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"我们打开 Desktop 来看一下界面。主界面分为几个区域——中间是对话区，AI 的回复和操作结果会显示在这里。底部是输入框，在这里用中文输入你的需求。左边是会话列表，可以同时开多个任务。你还可以拖拽文件到窗口，AI 就能直接读取。右上角可以切换模型，已经自动接入了智多鑫 Token Plan。<br><br>两个重要功能：按 Tab 键可以在 Plan 和 Build 模式间切换——Plan 模式 AI 只有分析不做修改，Build 模式可以执行所有操作。另外操作默认自动执行权限，不需要每一步都确认，保证流畅体验。<br><br>大家注意界面上的 <strong>技能中心</strong> 和 <strong>我的技能</strong>，这就是我们接下来要介绍的 Skills（技能）的入口。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>这是与听众互动的好机会——"大家看一下屏幕，这就是你们安装后打开会看到的界面。很简单对吧？"
+</div>
+
+<!-- --- Slide 8: Skills Intro --- -->
+<h3>Slide 7: Skills 是什么 <span class="time">(3 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"接下来介绍一个非常重要的概念——Skills，技能。你可以把 Skills 理解为提前给 AI 写好的'作业指导书'。比如我们有一个标准的数据分析流程——第一步读数据、第二步检查异常值、第三步生成图表、第四步写报告。你把这些步骤写成一份 SKILL.md 文件，以后 AI 看到类似任务，就会自动按这个流程执行。这就相当于把你的工作经验教给了 AI。"
+</div>
+<div class="warning">
+  <strong>注意：</strong>这是最抽象的概念，非技术同事可能不太好理解。尽量用"SOP"或"作业指导书"作比喻。
+</div>
+
+<!-- --- Slide 8: Skills Details --- -->
+<h3>Slide 8: Skills 详解 <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"Skills 的文件结构很简单——一个文件夹，里面放一个 SKILL.md 文件。文件头写基本信息（名称、描述），正文写具体要 AI 怎么做。它可以在项目中使用，也可以全局使用。调用有两种方式：一是 Agent 根据你的问题自动选择合适的技能；二是通过 / 命令手动触发。需要注意的是，技能名称必须用小写字母和连字符。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>快速展示代码示例，但不必逐行讲解。强调"看起来很复杂，但实际上只需要写几行字"。
+</div>
+
+<!-- --- Slide 9: Example Skills --- -->
+<h3>Slide 9: 常用 Skills 示例 <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"我们来看一些实际可用的 Skills 示例。grill-me 可以对你的方案进行深度拷问，帮你提前发现漏洞。frontend-design 是前端组件设计助手。pptx 和 xlsx 分别用来操作 PPT 和 Excel 文件。lark 技能可以连接飞书，操作文档和表格。workspace 是我们长鑫内部的工作区 Skill，集成了常用的内部工作流。这些 Skills 开箱即用，让 AI 能更懂我们的需求。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>快速过一遍即可，不用每个都详细展开。突出"开箱即用"和"长鑫内部 workspace"两个重点。
+</div>
+
+<!-- --- Slide 10: 应用场景 --- -->
+<h3>Slide 10: 质量可靠性应用场景 <span class="time">(3 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"讲完了概念，我们来聊聊和我们工作相关的地方。我们质量可靠性部门每天要做很多重复性工作——数据分析、缺陷追踪、报告编写、文档审核等等。CimiCode 可以在这些方面帮到我们。比如：<br><br>
+  <strong>数据分析：</strong>AI 直接读取测试数据，自动计算合格率、绘制趋势图。<br>
+  <strong>缺陷追踪：</strong>AI 连接到我们的缺陷管理系统，查询、分类、汇总。<br>
+  <strong>报告生成：</strong>我们只要提供数据和模板，AI 就能生成格式规范的质量报告。<br>
+  <strong>文档审核：</strong>给 AI 一份检查清单，它可以逐项核对文档内容。<br><br>
+  这些都是实实在在能提高效率的场景。"
+</div>
+<div class="tip">
+  <strong>提示：</strong>这里可以和听众互动，问"你们平时最花时间的重复性工作是什么？"
+</div>
+
+<!-- --- Slide 11: Demo --- -->
+<h3>Slide 11: Demo 演示 <span class="time">(8 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"接下来是大家最期待的环节——现场演示。我会用 CimiCode Desktop 演示一个质量数据分析的场景。具体步骤请参考 Demo 脚本。整体来说，你会看到我用自然语言告诉 AI 我想做什么，AI 自动完成整个流程。"
+</div>
+<div class="warning">
+  <strong>关键：</strong>Demo 是最重要的环节，务必演练熟练。<br>
+  准备好以下应急预案：<br>
+  - 如果网络卡顿：提前打开所有需要的页面<br>
+  - 如果 AI 回答不理想：准备一个"刚才的回答不太对，我们换个方式问"的过渡<br>
+  - 如果完全不行：准备录屏视频
+</div>
+
+<!-- --- Slide 12: Summary + Q&A --- -->
+<h3>Slide 12: 总结 + Q&A <span class="time">(2 分钟)</span></h3>
+<div class="note">
+  <strong>讲稿：</strong>"最后总结一下——CimiCode 是一个开源的 AI 助手，Desktop 桌面版让我们可以轻松使用。Skills 技能让我们可以把工作经验教给 AI。在质量可靠性工作中，数据分析、报告生成、缺陷追踪等场景都可以受益。希望大家回去后可以下载试用。如果有任何想法或需求，欢迎随时交流。现在进入 Q&A 环节。"
+</div>
+<div class="tip">
+  <strong>Q&A 常见问题预判：</strong><br>
+  - "这个安全吗？" → 强调数据隐私：不存储代码，可离线使用<br>
+  - "需要学编程吗？" → 不需要，自然语言即可<br>
+  - "要花多少钱？" → 有免费模型可用<br>
+  - "能帮我们做 XX 吗？" → 多数场景可以，具体评估
+</div>
+
+<hr>
+
+<h2>时间控制</h2>
+<table>
+  <tr><th>环节</th><th>时间</th><th>累计</th></tr>
+  <tr><td>开场</td><td>1 min</td><td>1 min</td></tr>
+  <tr><td>议程</td><td>0.5 min</td><td>1.5 min</td></tr>
+  <tr><td>为什么了解 CimiCode</td><td>1.5 min</td><td>3 min</td></tr>
+  <tr><td>CimiCode 是什么</td><td>2 min</td><td>5 min</td></tr>
+  <tr><td>三种使用方式</td><td>2 min</td><td>7 min</td></tr>
+  <tr><td>Desktop 应用</td><td>1 min</td><td>8 min</td></tr>
+  <tr><td>Desktop 界面导览</td><td>2 min</td><td>10 min</td></tr>
+  <tr><td>Skills 介绍</td><td>3 min</td><td>13 min</td></tr>
+  <tr><td>Skills 详解</td><td>2 min</td><td>14 min</td></tr>
+  <tr><td>Skill 示例</td><td>2 min</td><td>16 min</td></tr>
+  <tr><td>应用场景</td><td>3 min</td><td>19 min</td></tr>
+  <tr><td>Demo</td><td>8 min</td><td>26 min</td></tr>
+  <tr><td>总结 + Q&A</td><td>4 min</td><td>30 min</td></tr>
+</table>
+
+<div class="warning">
+  <strong>时间管理提示：</strong><br>
+  - 如果前面讲太快（≤15 分钟到 Demo），可以多展开场景讨论<br>
+  - 如果前面讲太慢（≥20 分钟还没到 Demo），压缩 Skills 权限部分<br>
+  - <strong>Demo 不可省略</strong>——这是听众最想看的部分
+</div>
+
+<hr>
+
+<h2>后续跟进</h2>
+<ul>
+  <li>收集同事的反馈和需求</li>
+  <li>根据需求设计定制的 Skills</li>
+  <li>安排进阶培训（如有需要）</li>
+  <li>建立使用交流群或频道</li>
+</ul>
+
+</body>
+</html>

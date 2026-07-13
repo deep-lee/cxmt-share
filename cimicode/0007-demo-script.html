@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo 脚本 — CimiCode 培训</title>
+  <style>
+    body {
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a2e;
+      background: #fafafa;
+      line-height: 1.7;
+    }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #1a73e8; padding-bottom: 0.4rem; }
+    h2 { font-size: 1.3rem; margin-top: 2rem; color: #1a73e8; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; color: #333; }
+    .step {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+    }
+    .step .header {
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 0.4rem;
+    }
+    .prompt {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+    .expected {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 0.8rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .note {
+      background: #fff8e1;
+      border-left: 4px solid #ffa000;
+      padding: 0.8rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    code { background: #e8eaf6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #f5f5f7; }
+  </style>
+</head>
+<body>
+
+<h1>Demo 脚本 — 质量数据自动分析</h1>
+<p>总时长：约 8 分钟 | 场景：模拟质量检测数据分析与报告生成</p>
+
+<div class="note">
+  <strong>准备说明：</strong>在开始 Demo 前，请在桌面创建一个 <code>demo-data</code> 文件夹，
+  里面放一个 <code>test-results.csv</code> 文件（请参考下面的数据准备部分）。确保已通过长鑫安全助手 → 软件管理安装好 CimiCode Desktop 并处于可用状态。
+</div>
+
+<!-- ============================================================ -->
+<h2>数据准备</h2>
+<p>在桌面创建 <code>demo-data/test-results.csv</code>，内容如下：</p>
+
+<div class="promit">批次号,产品型号,测试项,规格下限,规格上限,实测值,结果,测试日期
+BATCH-001,A1-100,耐压测试,100,200,156,通过,2026-07-01
+BATCH-001,A1-100,绝缘电阻,500,1000,823,通过,2026-07-01
+BATCH-001,A1-100,漏电流,,5,2.3,通过,2026-07-01
+BATCH-001,A2-200,耐压测试,100,200,189,通过,2026-07-01
+BATCH-001,A2-200,绝缘电阻,500,1000,912,通过,2026-07-01
+BATCH-001,A2-200,漏电流,,5,4.8,通过,2026-07-01
+BATCH-002,A1-100,耐压测试,100,200,92,不通过,2026-07-02
+BATCH-002,A1-100,绝缘电阻,500,1000,456,不通过,2026-07-02
+BATCH-002,A1-100,漏电流,,5,5.2,不通过,2026-07-02
+BATCH-002,A2-200,耐压测试,100,200,178,通过,2026-07-02
+BATCH-002,A2-200,绝缘电阻,500,1000,788,通过,2026-07-02
+BATCH-002,A2-200,漏电流,,5,1.9,通过,2026-07-02
+BATCH-003,A1-100,耐压测试,100,200,145,通过,2026-07-03
+BATCH-003,A1-100,绝缘电阻,500,1000,876,通过,2026-07-03
+BATCH-003,A1-100,漏电流,,5,3.1,通过,2026-07-03
+BATCH-003,A2-200,耐压测试,100,200,165,通过,2026-07-03
+BATCH-003,A2-200,绝缘电阻,500,1000,834,通过,2026-07-03
+BATCH-003,A2-200,漏电流,,5,2.7,通过,2026-07-03
+BATCH-004,A1-100,耐压测试,100,200,195,通过,2026-07-04
+BATCH-004,A1-100,绝缘电阻,500,1000,502,通过,2026-07-04
+BATCH-004,A1-100,漏电流,,5,4.9,通过,2026-07-04
+BATCH-004,A2-200,耐压测试,100,200,88,不通过,2026-07-04
+BATCH-004,A2-200,绝缘电阻,500,1000,678,通过,2026-07-04
+BATCH-004,A2-200,漏电流,,5,3.5,通过,2026-07-04
+BATCH-005,A1-100,耐压测试,100,200,134,通过,2026-07-05
+BATCH-005,A1-100,绝缘电阻,500,1000,723,通过,2026-07-05
+BATCH-005,A1-100,漏电流,,5,2.8,通过,2026-07-05
+BATCH-005,A2-200,耐压测试,100,200,172,通过,2026-07-05
+BATCH-005,A2-200,绝缘电阻,500,1000,891,通过,2026-07-05
+BATCH-005,A2-200,漏电流,,5,1.5,通过,2026-07-05
+BATCH-006,A1-100,耐压测试,100,200,103,通过,2026-07-06
+BATCH-006,A1-100,绝缘电阻,500,1000,645,通过,2026-07-06
+BATCH-006,A1-100,漏电流,,5,4.2,通过,2026-07-06
+BATCH-006,A2-200,耐压测试,100,200,158,通过,2026-07-06
+BATCH-006,A2-200,绝缘电阻,500,1000,756,通过,2026-07-06
+BATCH-006,A2-200,漏电流,,5,2.1,通过,2026-07-06</pre>
+
+<div class="note">
+  <strong>Tip:</strong> 建议在 Desktop 应用中通过拖拽文件夹到会话窗口的方式快速引入文件上下文。
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Demo 流程</h2>
+
+<!-- Step 1 -->
+<div class="step">
+  <div class="header">步骤 1：打开 Desktop 并加载数据 <span class="time">(1 min)</span></div>
+  <p><strong>操作：</strong>打开 CimiCode Desktop，选择使用免费模型或已配置的模型。</p>
+  <p><strong>话术：</strong>"大家看，这就是 CimiCode Desktop 的界面——非常简洁。下面有个输入框，我们在这里用中文告诉 AI 我们想做什么。"</p>
+  <p><strong>操作：</strong>将 <code>demo-data</code> 文件夹拖入对话窗口（Desktop 支持文件引用）。</p>
+  <p><strong>话术：</strong>"我把数据文件夹拖进去，AI 就能看到里面的文件了。"</p>
+</div>
+
+<!-- Step 2 -->
+<div class="step">
+  <div class="header">步骤 2：让 AI 分析数据 <span class="time">(2.5 min)</span></div>
+  <p><strong>话术：</strong>"现在我们输入第一个指令——让 AI 看看我们有哪些数据。"</p>
+  
+  <div class="prompt">请帮我看看 demo-data 文件夹里的测试数据文件，告诉我里面有哪些数据。</div>
+
+  <div class="expected">
+    <strong>预期：</strong>AI 应该会读取 CSV 文件，告诉你数据包含：6 个批次、2 种产品型号、3 种测试项、测试日期范围等信息。
+  </div>
+
+  <p><strong>话术：</strong>"很好，AI 读懂了数据。现在我们让它做更深入的分析。"</p>
+
+  <div class="prompt">请帮我分析这些测试数据，计算：
+1. 整体合格率
+2. 各批次合格率
+3. 各产品型号合格率
+4. 各测试项的合格率
+并以表格形式展示</div>
+
+  <div class="expected">
+    <strong>预期：</strong>AI 应该生成一个包含合格率统计的报告。BATCH-002 合格率 0%，BATCH-004 合格率 67%，其余批次 100%。A1-100 合格率较低等。
+  </div>
+
+  <p><strong>话术：</strong>"大家看到了吗？AI 几秒钟就把数据算出来了。如果是人工来做，可能要花不少时间吧？"</p>
+  <div class="note"><strong>互动提示：</strong>这里可以问听众"你们平时做这种统计要多久？"</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step">
+  <div class="header">步骤 3：查找异常并生成报告 <span class="time">(2 min)</span></div>
+  <p><strong>话术：</strong>"现在我们让 AI 进一步分析异常原因并生成报告。"</p>
+
+  <div class="prompt">请帮我分析不合格的批次，找出：
+1. 主要的不合格原因是什么
+2. 哪个测试项的问题最多
+3. 给出改进建议
+然后生成一份质量分析报告，用 Markdown 格式保存为 report.md</div>
+
+  <div class="expected">
+    <strong>预期：</strong>AI 会分析 BATCH-002 的 A1-100 全部三项测试不通过、BATCH-004 的 A2-200 耐压测试不通过。识别出 A1-100 型号问题最多，建议排查生产工艺。然后保存报告文件。
+  </div>
+
+  <p><strong>话术：</strong>"AI 不仅分析了数据，还把报告保存成了文件。我们可以直接打开查看，甚至发给别人。"</p>
+</div>
+
+<!-- Step 4 -->
+<div class="step">
+  <div class="header">步骤 4：可视化展示 <span class="time">(1.5 min)</span></div>
+  <p><strong>话术：</strong>"最后，我们让 AI 生成一个图表来直观展示。"</p>
+
+  <div class="prompt">请写一个 Python 脚本，根据 test-results.csv 生成一个合格率趋势图，按批次显示各型号的合格率。保存为 chart.png。</div>
+
+  <div class="expected">
+    <strong>预期：</strong>AI 会生成一个 Python 脚本（使用 matplotlib），运行后生成一个柱状图或折线图。
+  </div>
+
+  <p><strong>话术：</strong>"AI 自动写了脚本、运行、生成了图表。整个过程完全不需要我们写一行代码。"</p>
+</div>
+
+<!-- Step 5: Show a Skill -->
+<div class="step">
+  <div class="header">步骤 5：（可选）展示一个 Skill <span class="time">(1 min)</span></div>
+  <p><strong>话术：</strong>"最后快速展示一下 Skills。如果我提前写了一个 Skill，AI 会怎么做？"</p>
+  <div class="note"><strong>如果时间充裕</strong>，可以快速展示一个预置的 Skill。如果时间不够可以跳过。</div>
+</div>
+
+<hr>
+
+<h2>Demo 脚本汇总</h2>
+
+<table>
+  <tr><th>顺序</th><th>提示词</th><th>时长</th></tr>
+  <tr><td>1</td><td>（拖入文件夹）"请帮我看看 demo-data 文件夹里的测试数据"</td><td>1 min</td></tr>
+  <tr><td>2</td><td>"请帮我分析这些测试数据，计算合格率..."</td><td>2.5 min</td></tr>
+  <tr><td>3</td><td>"请帮我分析不合格的批次，生成报告并保存"</td><td>2 min</td></tr>
+  <tr><td>4</td><td>"请生成合格率趋势图，保存为 chart.png"</td><td>1.5 min</td></tr>
+  <tr><td>5</td><td>（可选）展示 Skill</td><td>1 min</td></tr>
+  <tr><td colspan="2"><strong>总计</strong></td><td><strong>~8 min</strong></td></tr>
+</table>
+
+<hr>
+
+<h2>应急预案</h2>
+
+<div class="note">
+  <strong>如果 AI 回答不理想：</strong><br>
+  - "这个回答不太对，我们再重新问一次"<br>
+  - 调整措辞再试一次<br>
+  - 准备提前录制好的屏幕录像作为备用
+</div>
+
+<div class="note">
+  <strong>如果网络中断：</strong><br>
+  - 切换到自带免费模型（部分模型可离线使用）<br>
+  - 或直接展示录制好的视频
+</div>
+
+<div class="note">
+  <strong>如果文件拖拽失败：</strong><br>
+  - 在提示词中直接引用文件路径，如：<code>@桌面/demo-data/test-results.csv</code>
+</div>
+
+</body>
+</html>
